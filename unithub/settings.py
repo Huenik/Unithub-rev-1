@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'unithub.middleware.WIPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,6 +88,10 @@ STEAM_API_KEY = env("STEAM_API_KEY", default=None)
 STEAM_REDIRECT_URI = env("STEAM_REDIRECT_URI", default=None)
 
 ROOT_URLCONF = 'unithub.urls'
+
+# TODO Finish off the WIP features to remove the dispatch checks from the base views and environment settings
+ENABLE_EVENTS = env.bool("ENABLE_EVENTS", default=False)
+ENABLE_TRAINING = env.bool("ENABLE_TRAINING", default=False)
 
 TEMPLATES = [
     {

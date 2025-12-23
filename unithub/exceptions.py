@@ -1,0 +1,2 @@
+class WIPFeatureError(Exception):
+    pass
