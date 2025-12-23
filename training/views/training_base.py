@@ -8,8 +8,7 @@ class TrainingBaseView(UnitHubBaseView):
         user = self.request.user
 
         context["show_management"] = user.is_authenticated and user.is_staff
-
-        context["title"] = "Training"
+        context["title"] = self.title
 
         context["sidebar"] = [
             {"name": "Overview", "path": "/training/"},
