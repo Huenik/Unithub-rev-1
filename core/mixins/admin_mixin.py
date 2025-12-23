@@ -1,8 +1,5 @@
-from django.db import models
-from django.db.models import Max
 from django.shortcuts import redirect
 from django.urls import path, reverse
-from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from rest_framework.generics import get_object_or_404
 

@@ -1,5 +1,5 @@
 from orbat.models import Section
-from unithub.views.base import UnitHubBaseView
+from core.views.base import UnitHubBaseView
 
 
 class ORBATBaseView(UnitHubBaseView):

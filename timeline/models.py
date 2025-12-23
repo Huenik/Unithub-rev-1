@@ -2,7 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
 from django.utils import timezone
 
-from unithub import settings
+from core import settings
 
 
 class TimelineTypes(models.TextChoices):

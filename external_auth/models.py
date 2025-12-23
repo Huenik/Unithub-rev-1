@@ -1,6 +1,6 @@
 from django.db import models
 
-from unithub import settings
+from core import settings
 
 
 # Create your models here.

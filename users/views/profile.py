@@ -1,11 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
-from unithub.views import UnitHubBaseView
+from core.views import UnitHubBaseView
 from users.models import CustomUser
 
 

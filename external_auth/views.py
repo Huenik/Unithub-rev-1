@@ -8,7 +8,7 @@ from django.views import View
 
 from external_auth.backends import ExternalAccountBackend
 from external_auth.models import DiscordAccount
-from unithub import settings
+from core import settings
 
 
 # Helper: exchange OAuth code for token

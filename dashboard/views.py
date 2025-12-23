@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect
-
-from dashboard.models import NavShortcut
-from unithub.views import UnitHubBaseView
+from core.views import UnitHubBaseView
 
 
 class DashboardView(UnitHubBaseView):

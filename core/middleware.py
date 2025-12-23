@@ -1,5 +1,5 @@
-from unithub.exceptions import WIPFeatureError
-from unithub.views import Custom503View
+from core.exceptions import WIPFeatureError
+from core.views import Custom503View
 
 
 class WIPMiddleware:

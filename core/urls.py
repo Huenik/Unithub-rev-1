@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from unithub.views import Custom403View, Custom404View, Custom503View
+from core.views import Custom403View, Custom404View, Custom503View
 
 urlpatterns = [
     path('admin/', admin.site.urls),

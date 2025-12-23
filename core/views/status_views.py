@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from unithub.views import UnitHubBaseView
+from core.views import UnitHubBaseView
 
 
 class Custom403View(UnitHubBaseView):

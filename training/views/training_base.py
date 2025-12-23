@@ -1,8 +1,7 @@
 from django.conf import settings
-from django.shortcuts import render
 
-from unithub.exceptions import WIPFeatureError
-from unithub.views import UnitHubBaseView
+from core.exceptions import WIPFeatureError
+from core.views import UnitHubBaseView
 
 
 class TrainingBaseView(UnitHubBaseView):
