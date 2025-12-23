@@ -1,10 +1,9 @@
 from django.conf import settings
 from django.db import models, transaction
-from django.db.models import Max
 from django.utils import timezone
 
 from external_auth.models import DiscordAccount
-from unithub.mixins.model_mixin import OrderedModelMixin
+from core.mixins.model_mixin import OrderedModelMixin
 
 
 class Platoon(OrderedModelMixin, models.Model):

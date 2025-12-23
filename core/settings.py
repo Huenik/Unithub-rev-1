@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    "unithub",
+    "core",
     "apis",
     "attendance",
     "dashboard",
@@ -60,7 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'unithub.middleware.WIPMiddleware',
+    'core.middleware.WIPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,7 +87,7 @@ DISCORD_REDIRECT_URI = env("DISCORD_REDIRECT_URI", default=None)
 STEAM_API_KEY = env("STEAM_API_KEY", default=None)
 STEAM_REDIRECT_URI = env("STEAM_REDIRECT_URI", default=None)
 
-ROOT_URLCONF = 'unithub.urls'
+ROOT_URLCONF = 'core.urls'
 
 # TODO Finish off the WIP features to remove the dispatch checks from the base views and environment settings
 ENABLE_EVENTS = env.bool("ENABLE_EVENTS", default=False)
@@ -109,7 +109,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'unithub.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database

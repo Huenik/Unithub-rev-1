@@ -1,8 +1,6 @@
-import secrets
-
 from django.db import models
 
-from unithub import settings
+from core import settings
 
 class Permissions(models.TextChoices):
     ADD_USER = "add_user", "Add User"

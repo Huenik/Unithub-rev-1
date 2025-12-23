@@ -1,7 +1,7 @@
 from django.conf import settings
 
-from unithub.exceptions import WIPFeatureError
-from unithub.views import UnitHubBaseView
+from core.exceptions import WIPFeatureError
+from core.views import UnitHubBaseView
 
 
 class EventBaseView(UnitHubBaseView):

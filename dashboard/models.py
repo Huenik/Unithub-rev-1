@@ -1,7 +1,6 @@
 from django.db import models
 
-from dashboard.manager import NavShortcutManager
-from unithub.mixins.model_mixin import OrderedModelMixin
+from core.mixins.model_mixin import OrderedModelMixin
 
 
 class NavShortcut(OrderedModelMixin, models.Model):

@@ -3,8 +3,8 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
-from unithub import settings
-from unithub.views import UnitHubBaseView
+from core import settings
+from core.views import UnitHubBaseView
 
 
 class CustomLoginView(UnitHubBaseView, LoginView):

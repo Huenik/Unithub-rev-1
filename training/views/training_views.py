@@ -1,11 +1,7 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 
 from orbat.models import Section, SectionAssignment
-from unithub import settings
-from unithub.views import UnitHubBaseView
-from users.models import CustomUser
 from users.views import ProfileBaseView
 from . import TrainingBaseView
 from users.backends import User

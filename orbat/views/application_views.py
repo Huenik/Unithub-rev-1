@@ -1,13 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 
 from orbat.models import UnitApplication, SectionApplication, Section
 from orbat.views import ORBATBaseView
-from unithub.views import UnitHubBaseView
 
 
 class ORBATApplicationLOA(View):
