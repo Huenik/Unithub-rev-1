@@ -1,7 +1,8 @@
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from core import settings
 from core.views import UnitHubBaseView
@@ -18,11 +19,7 @@ class CustomLoginView(UnitHubBaseView, LoginView):
 
         context['discord_login_enabled'] = bool(getattr(settings, 'DISCORD_CLIENT_ID', None))
         context['discord_auth_url'] = (
-            f"https://discord.com/api/oauth2/authorize?"
-            f"client_id={settings.DISCORD_CLIENT_ID}&"
-            f"redirect_uri={settings.DISCORD_REDIRECT_URI}&"
-            f"response_type=code&"
-            f"scope=identify%20email%20guilds"
+            reverse("external_auth:discord_login")
         ) if context['discord_login_enabled'] else None
 
         context['steam_login_enabled'] = bool(getattr(settings, 'STEAM_API_KEY', None))
@@ -39,5 +36,11 @@ class CustomLoginView(UnitHubBaseView, LoginView):
 
 def logout_view(request):
     logout(request)  # clears the session
-    next_url = request.GET.get("next") or settings.LOGOUT_REDIRECT_URL
-    return redirect(next_url)
+    next_url = request.GET.get("next")
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(next_url)
+    return redirect(settings.LOGOUT_REDIRECT_URL)

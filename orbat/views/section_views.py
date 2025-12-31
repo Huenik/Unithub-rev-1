@@ -1,9 +1,11 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.decorators import method_decorator
 from django.views import View
 
 from orbat.models import get_section_on_date, SectionSlot, Section, SectionAssignment
@@ -11,6 +13,7 @@ from orbat.utils import get_section_slot_context
 from orbat.views import ORBATBaseView
 
 
+@method_decorator(login_required, name="dispatch")
 class ORBATSectionDetailView(ORBATBaseView):
     template_name = 'orbat_section_detail.html'
 

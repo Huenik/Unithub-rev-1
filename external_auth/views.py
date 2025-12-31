@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth import login
 import requests
 from django.shortcuts import render, redirect
+from django.utils.crypto import get_random_string
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views import View
 
 from external_auth.backends import ExternalAccountBackend
@@ -45,11 +47,15 @@ class DiscordOAuthRedirectView(View):
         if not getattr(settings, "DISCORD_CLIENT_ID", None):
             return redirect("login")  # OAuth not configured
 
+        state = get_random_string(32)
+        request.session["discord_oauth_state"] = state
+
         params = {
             "client_id": settings.DISCORD_CLIENT_ID,
             "redirect_uri": settings.DISCORD_REDIRECT_URI,
             "response_type": "code",
-            "scope": "identify"
+            "scope": "identify email guilds",
+            "state": state,
         }
         url = f"https://discord.com/api/oauth2/authorize?{urlencode(params)}"
         return redirect(url)
@@ -59,6 +65,12 @@ class DiscordOAuthCallbackView(View):
         code = request.GET.get("code")
         if not code:
             messages.error(request, "No code returned from Discord")
+            return redirect("login")
+
+        state = request.GET.get("state")
+        session_state = request.session.pop("discord_oauth_state", None)
+        if not state or state != session_state:
+            messages.error(request, "Invalid OAuth state returned from Discord")
             return redirect("login")
 
         try:
@@ -112,5 +124,13 @@ class DiscordOAuthCallbackView(View):
         user.backend = "external_auth.backends.ExternalAccountBackend"
         login(request, user)
 
-        next_url = request.GET.get("next") or settings.LOGIN_REDIRECT_URL
+        next_url = request.GET.get("next")
+        if next_url and url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure(),
+        ):
+            return redirect(next_url)
+
+        next_url = settings.LOGIN_REDIRECT_URL
         return redirect(next_url)

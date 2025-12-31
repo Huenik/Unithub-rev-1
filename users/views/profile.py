@@ -7,6 +7,7 @@ from core.views import UnitHubBaseView
 from users.models import CustomUser
 
 
+@method_decorator(login_required, name="dispatch")
 class UserListView(UnitHubBaseView):
     template_name = 'users_list.html'
 
@@ -52,6 +53,7 @@ class MyProfileView(ProfileBaseView):
         context['has_edit_perms'] = True
         return context
 
+@method_decorator(login_required, name="dispatch")
 class UserProfileView(ProfileBaseView):
     template_name = 'user_profile.html'
 

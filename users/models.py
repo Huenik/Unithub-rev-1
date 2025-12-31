@@ -97,7 +97,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return None
 
     def save(self, *args, **kwargs):
-        print(self.rank)
         if self.status == UserStatus.RETIRED:
             self.rank = None
             self.section = None
@@ -105,5 +104,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             # If no rank set and not retired → default to PVT
             if not self.rank:
                 self.rank = "PVT"
-        print(self.rank)
         super().save(*args, **kwargs)
