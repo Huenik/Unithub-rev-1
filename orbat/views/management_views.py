@@ -65,12 +65,22 @@ class ORBATSectionManagementView(ORBATBaseView):
         return context
 
 
+@login_required
 def slot_move_up(request, section_name, slot_id):
     slot = get_object_or_404(SectionSlot, pk=slot_id)
+    section = slot.section
+    if not request.user.is_staff and section.leader != request.user:
+        messages.error(request, "You don't have access to modify this section.")
+        return redirect("/orbat/")
     slot.move_up()
     return redirect(request.META.get('HTTP_REFERER', f'/orbat/section/{section_name}/management/'))
 
+@login_required
 def slot_move_down(request, section_name, slot_id):
     slot = get_object_or_404(SectionSlot, pk=slot_id)
+    section = slot.section
+    if not request.user.is_staff and section.leader != request.user:
+        messages.error(request, "You don't have access to modify this section.")
+        return redirect("/orbat/")
     slot.move_down()
     return redirect(request.META.get('HTTP_REFERER', f'/orbat/section/{section_name}/management/'))

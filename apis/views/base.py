@@ -3,8 +3,10 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied
+from django.conf import settings
+from django.db.models import Q
 
-from apis.models import UserAPIKey, ServiceAPIKey
+from apis.models import APIKeyBase, UserAPIKey, ServiceAPIKey
 
 
 class BaseAPIView(APIView):
@@ -17,9 +19,10 @@ class BaseAPIView(APIView):
         api_key_value = self.request.headers.get('X-API-KEY')
         if not api_key_value:
             return None
+        hashed_key = APIKeyBase.hash_key(api_key_value)
 
         for KeyModel in [UserAPIKey, ServiceAPIKey]:
-            key = KeyModel.objects.filter(key=api_key_value).first()
+            key = KeyModel.objects.filter(Q(key=hashed_key) | Q(key=api_key_value)).first()
             if key:
                 return key
 
@@ -43,6 +46,13 @@ class BaseAPIView(APIView):
             return True
         return False
 
+    def _get_client_ip(self, request):
+        if settings.SECURE_PROXY_SSL_HEADER and request.META.get("HTTP_X_FORWARDED_FOR"):
+            forwarded_for = request.META["HTTP_X_FORWARDED_FOR"].split(",")[0].strip()
+            if forwarded_for:
+                return forwarded_for
+        return request.META.get("REMOTE_ADDR")
+
     def initial(self, request, *args, **kwargs):
         super().initial(request, *args, **kwargs)
         method = request.method.upper()
@@ -58,8 +68,8 @@ class BaseAPIView(APIView):
 
         if key:
             if key.get_type() == "service" and key.allowed_ips:
-                client_ip = request.META.get("REMOTE_ADDR")
-                if not key.is_ip(client_ip):
+                client_ip = self._get_client_ip(request)
+                if not key.is_ip_allowed(client_ip):
                     raise PermissionDenied("Insufficient permissions")
 
             perms = self.required_permissions.get(method)

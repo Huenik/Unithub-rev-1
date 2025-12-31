@@ -1,3 +1,5 @@
+import hashlib
+
 from django.db import models
 
 from core import settings
@@ -16,14 +18,24 @@ class APIKeyBase(models.Model):
     class Meta:
         abstract = True
 
+    @staticmethod
+    def hash_key(raw_key: str) -> str:
+        return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
+
     def generate_key(self):
         import secrets
         return secrets.token_hex(32)
 
     def save(self, *args, **kwargs):
         if not self.key:
-            self.key = self.generate_key()
+            raw_key = self.generate_key()
+            self.key = self.hash_key(raw_key)
+            self._raw_key = raw_key
         super().save(*args, **kwargs)
+
+    @property
+    def raw_key(self):
+        return getattr(self, "_raw_key", None)
 
 class UserAPIKey(APIKeyBase):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="api_key")

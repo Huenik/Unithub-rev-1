@@ -3,13 +3,16 @@ from collections import defaultdict
 from django.db.models import Q, Value, When, Case, F
 from django.db.models.functions import Coalesce
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 
 from orbat.models import SectionAssignment, Section, SectionSlot
 from orbat.views.orbat_base_views import ORBATBaseView
 from users.models import CustomUser, UserStatus
 
 
+@method_decorator(login_required, name="dispatch")
 class ORBATOverviewView(ORBATBaseView):
     template_name = "orbat_overview.html"
 
@@ -76,6 +79,7 @@ class ORBATOverviewView(ORBATBaseView):
 
         return context
 
+@method_decorator(login_required, name="dispatch")
 class ORBATMemberView(ORBATBaseView):
     template_name = "orbat_members.html"
 
@@ -97,12 +101,9 @@ class ORBATMemberView(ORBATBaseView):
 
         members = CustomUser.objects.all().order_by(order_field)
         context['members'] = members
-        print("Calling context for member view")
-
         return context
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.headers.get("HX-Request") == "true":
-            print("Calling sub table for members")
             return render(self.request, "partials/members_table.html", context, **response_kwargs)
         return super().render_to_response(context, **response_kwargs)
